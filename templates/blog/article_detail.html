@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ article.title }}{% endblock title %}
+{% block content %}
+<main class="container">
+    <div class="bg-light p-5 rounded">
+        <h2>{{ article.title }}</h2>
+        <br>
+        <br>
+        <p class="lead">
+            {{ article.content }}
+        </p>
+        <hr>
+        <em>Опубликовано: {{ article.pub_date }}</em>
+    </div>
+    <hr>
+    <div class="w-75">
+        <h4>Комментарии({{comments.count}})</h4>
+        {% if comments %}
+            {% for c in comments %}
+                <div class="px-5 py-3 border bg-light">
+                    <p class="mb-0 fw-bold fs-5">
+                        {{ c.name }}
+                    </p>
+                    <p class="mb-0 fst-italic">
+                        {{ c.pub_date }}
+                    </p>
+                        <br>
+                    <p>
+                        {{ c.content }}
+                    </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>
+                <div class="p-3 border bg-light">
+                    <p class="mb-0 fst-italic align-middle " align="center">
+                        No comments yet.
+                    </p>
+                </div>
+            </p>
+        {% endif %}
+    <br>
+    <form action="{% url 'articles:leave_comment' article.id %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" required placeholder="Имя"
+                   name="name" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <textarea class="form-control" required name="content" aria-label="With textarea"></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+    </div>
+</main>
+{% endblock content %}
